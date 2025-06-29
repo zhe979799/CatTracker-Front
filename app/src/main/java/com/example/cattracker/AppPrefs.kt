@@ -9,6 +9,7 @@ object AppPrefs {
     private const val PREFS_NAME = "cattracker_prefs"
     private const val KEY_PORT = "server_port"
     private const val KEY_REPORTS = "reports"
+    private const val KEY_BLUETOOTH_ADDR = "bluetooth_addr"
 
     private lateinit var prefs: SharedPreferences
 
@@ -19,6 +20,10 @@ object AppPrefs {
     var port: Int
         get() = prefs.getInt(KEY_PORT, 8080)
         set(value) { prefs.edit().putInt(KEY_PORT, value).apply() }
+
+    var bluetoothAddress: String
+        get() = prefs.getString(KEY_BLUETOOTH_ADDR, "") ?: ""
+        set(value) { prefs.edit().putString(KEY_BLUETOOTH_ADDR, value).apply() }
 
     fun loadReports(): List<CatReport> {
         val json = prefs.getString(KEY_REPORTS, null) ?: return emptyList()

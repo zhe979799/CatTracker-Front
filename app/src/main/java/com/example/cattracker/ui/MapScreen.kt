@@ -25,6 +25,8 @@ fun MapScreen(repo: ReportRepository) {
 
     AndroidView(factory = { mapView }, modifier = Modifier.fillMaxSize()) { view ->
         val map = view.map
+        map.uiSettings.isMyLocationButtonEnabled = true
+        map.isMyLocationEnabled = true
         map.clear()
         for (r in reports) {
             val pos = LatLng(r.lat, r.lng)
