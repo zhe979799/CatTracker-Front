@@ -6,11 +6,11 @@ import com.example.cattracker.data.ReportRepository
 import fi.iki.elonen.NanoHTTPD
 import org.json.JSONObject
 
-class CatWebServer : NanoHTTPD(8080) {
+class CatWebServer(port: Int) : NanoHTTPD(port) {
 
     fun startServer() {
         start(SOCKET_READ_TIMEOUT, false)
-        Log.i("CatWebServer", "Server started on port 8080")
+        Log.i("CatWebServer", "Server started on port $listeningPort")
     }
 
     override fun serve(session: IHTTPSession): Response {

@@ -11,22 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import android.content.Intent
+import androidx.compose.material.TextButton
 import com.example.cattracker.data.CatReport
 import com.example.cattracker.data.ReportRepository
 import com.example.cattracker.ui.theme.CatTrackerTheme
-import com.example.cattracker.web.CatWebServer
+import com.example.cattracker.web.WebServerManager
+import com.example.cattracker.AppPrefs
+import com.example.cattracker.SettingsActivity
 
 class MainActivity : ComponentActivity() {
-
-    /** 本地 HTTP/WebSocket 服务器 */
-    private val server = CatWebServer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        ReportRepository.init(applicationContext)
         // 启动服务器
-        server.start()
+        WebServerManager.start(AppPrefs.port)
 
         setContent {
             CatTrackerTheme {
@@ -38,7 +41,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         // 关闭服务器，释放端口
-        server.stop()
+        WebServerManager.stop()
     }
 }
 
@@ -47,9 +50,21 @@ fun AppContent(repo: ReportRepository) {
     val scaffoldState = rememberScaffoldState()
     val reports by repo.reports.collectAsState(initial = emptyList())
 
+    val context = LocalContext.current
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopAppBar(title = { Text("Cat Tracker") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Cat Tracker") },
+                actions = {
+                    TextButton(onClick = {
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
+                    }) {
+                        Text("Settings", color = MaterialTheme.colors.onPrimary)
+                    }
+                }
+            )
+        }
     ) { padding ->
         ReportList(
             reports = reports,
