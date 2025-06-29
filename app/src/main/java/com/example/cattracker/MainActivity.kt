@@ -17,6 +17,7 @@ import com.example.cattracker.ui.theme.CatTrackerTheme
 import com.example.cattracker.web.WebServerManager
 import com.example.cattracker.AppPrefs
 import com.example.cattracker.SettingsActivity
+import com.amap.api.maps.MapsInitializer
 
 class MainActivity : ComponentActivity() {
 
@@ -26,6 +27,9 @@ class MainActivity : ComponentActivity() {
         ReportRepository.init(applicationContext)
         // 启动服务器
         WebServerManager.start(AppPrefs.port)
+
+        MapsInitializer.updatePrivacyShow(applicationContext, true, true)
+        MapsInitializer.updatePrivacyAgree(applicationContext, true)
 
         setContent {
             CatTrackerTheme {
