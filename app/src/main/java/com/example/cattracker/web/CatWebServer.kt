@@ -1,0 +1,31 @@
+package com.example.cattracker.web
+
+import android.util.Log
+import com.example.cattracker.data.CatReport
+import com.example.cattracker.data.ReportRepository
+import fi.iki.elonen.NanoHTTPD
+import org.json.JSONObject
+
+class CatWebServer : NanoHTTPD(8080) {
+
+    fun startServer() {
+        start(SOCKET_READ_TIMEOUT, false)
+        Log.i("CatWebServer", "Server started on port 8080")
+    }
+
+    override fun serve(session: IHTTPSession): Response {
+        val map = HashMap<String, String>()
+        session.parseBody(map)
+        val json = session.parms["data"] ?: map["postData"]
+        json?.let {
+            try {
+                val obj = JSONObject(it)
+                val report = CatReport.fromJson(obj)
+                ReportRepository.addReport(report)
+            } catch (e: Exception) {
+                Log.e("CatWebServer", "Invalid json", e)
+            }
+        }
+        return newFixedLengthResponse("ok")
+    }
+}
