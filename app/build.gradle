@@ -13,11 +13,26 @@ android {
         targetSdk 34
         versionCode 1
         versionName '1.0'
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters  "armeabi-v7a", "arm64-v8a"
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("my-release-key.jks")  // 密钥库路径（相对或绝对路径）
+            storePassword "1234567890."  // 密钥库密码
+            keyAlias "my-key-alias"  // 密钥别名
+            keyPassword "1234567890."  // 密钥密码
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release  // 应用签名配置
+            minifyEnabled false  // 启用代码混淆
+            shrinkResources false  // 启用资源压缩
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
