@@ -5,6 +5,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -21,7 +23,7 @@ fun MapScreen(repo: ReportRepository) {
     val mapView = rememberMapViewWithLifecycle()
     val reports by repo.reports.collectAsState(initial = emptyList())
 
-    AndroidView(factory = { mapView }) { view ->
+    AndroidView(factory = { mapView }, modifier = Modifier.fillMaxSize()) { view ->
         val map = view.map
         map.clear()
         for (r in reports) {
