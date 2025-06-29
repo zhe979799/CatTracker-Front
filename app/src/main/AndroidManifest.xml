@@ -36,6 +36,7 @@
             android:usesCleartextTraffic="true">   <!-- 如用 HTTPS 可删掉 -->
 
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".ReportListActivity" />
 
         <!-- 启动入口 -->
         <activity
