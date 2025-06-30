@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">CatTracker</string>
+    <string name="title_main">Cat Tracker</string>
+    <string name="btn_settings">Settings</string>
+    <string name="btn_reports">Reports</string>
+    <string name="msg_no_reports">No cat reports yet.</string>
+    <string name="label_server_port">Server Port</string>
+    <string name="label_bt_address">Bluetooth MAC Address</string>
+    <string name="btn_start_server">Start Server</string>
+    <string name="btn_stop_server">Stop Server</string>
+    <string name="btn_connect_bt">Connect BT</string>
+    <string name="btn_select_device">Select Device</string>
+    <string name="msg_invalid_port">Invalid server port</string>
+    <string name="msg_location_permission">Location permission is required for showing your position on the map.</string>
+    <string name="action_grant_permission">Grant</string>
+    <string name="action_open_settings">Settings</string>
+    <string name="msg_server_started">Server started at %1$s</string>
+    <string name="msg_server_failed">Failed to start server</string>
+    <string name="msg_bt_connect_success">Bluetooth connected</string>
+    <string name="msg_bt_connect_failed">Bluetooth connection failed</string>
 </resources>

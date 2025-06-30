@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import com.example.cattracker.R
 import com.example.cattracker.data.ReportRepository
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,7 +22,7 @@ fun ReportListScreen(repo: ReportRepository) {
     val sorted = reports.sortedBy { it.timestamp }
     if (sorted.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No cat reports yet.")
+            Text(stringResource(R.string.msg_no_reports))
         }
     } else {
         LazyColumn {
