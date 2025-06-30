@@ -3,30 +3,47 @@ package com.example.cattracker
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import android.widget.Toast
-import android.net.wifi.WifiManager
+import com.example.cattracker.bluetooth.BluetoothService
+import com.example.cattracker.ui.theme.CatTrackerTheme
+import com.example.cattracker.web.WebServerManager
 import java.net.InetAddress
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import com.example.cattracker.ui.theme.CatTrackerTheme
-import com.example.cattracker.R
-import com.example.cattracker.web.WebServerManager
-import com.example.cattracker.bluetooth.BluetoothService
 
 class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,26 +166,32 @@ fun SettingsScreen() {
                     isPortError = true
                     Toast.makeText(
                         context,
-                        stringResource(R.string.msg_invalid_port),
+                        context.getString(R.string.msg_invalid_port),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }) { Text(stringResource(R.string.btn_start_server)) }
+
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = { WebServerManager.stop() }) { Text(stringResource(R.string.btn_stop_server)) }
+
+            Button(onClick = {
+                WebServerManager.stop()
+            }) { Text(stringResource(R.string.btn_stop_server)) }
+
             Spacer(modifier = Modifier.width(8.dp))
+
             Button(onClick = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     if (ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                            context,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
                     ) {
                         BluetoothService(AppPrefs.bluetoothAddress) { success ->
                             Toast.makeText(
                                 context,
-                                if (success) stringResource(R.string.msg_bt_connect_success)
-                                else stringResource(R.string.msg_bt_connect_failed),
+                                if (success) context.getString(R.string.msg_bt_connect_success)
+                                else context.getString(R.string.msg_bt_connect_failed),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }.connect()
@@ -179,8 +202,8 @@ fun SettingsScreen() {
                     BluetoothService(AppPrefs.bluetoothAddress) { success ->
                         Toast.makeText(
                             context,
-                            if (success) stringResource(R.string.msg_bt_connect_success)
-                            else stringResource(R.string.msg_bt_connect_failed),
+                            if (success) context.getString(R.string.msg_bt_connect_success)
+                            else context.getString(R.string.msg_bt_connect_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                     }.connect()
@@ -196,4 +219,3 @@ private fun getLocalIp(context: Context): String? {
     val bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipInt).array()
     return InetAddress.getByAddress(bytes).hostAddress
 }
-

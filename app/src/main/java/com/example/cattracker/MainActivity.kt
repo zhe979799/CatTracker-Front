@@ -20,6 +20,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.provider.Settings
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.cattracker.data.ReportRepository
 import com.example.cattracker.ui.MapScreen
 import com.example.cattracker.ui.theme.CatTrackerTheme
