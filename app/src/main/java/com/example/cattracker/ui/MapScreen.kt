@@ -16,6 +16,7 @@ import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
+import com.amap.api.maps.model.PolylineOptions
 import com.example.cattracker.data.ReportRepository
 
 @Composable
@@ -28,12 +29,20 @@ fun MapScreen(repo: ReportRepository) {
         map.uiSettings.isMyLocationButtonEnabled = true
         map.isMyLocationEnabled = true
         map.clear()
-        for (r in reports) {
+        val sortedReports = reports.sortedBy { it.timestamp }
+        val polyline = PolylineOptions()
+        for (r in sortedReports) {
             val pos = LatLng(r.lat, r.lng)
-            map.addMarker(MarkerOptions().position(pos).title(r.catId))
+            polyline.add(pos)
+            val marker = MarkerOptions().position(pos).title(r.catId)
+            r.info?.let { marker.snippet(it) }
+            map.addMarker(marker)
         }
-        if (reports.isNotEmpty()) {
-            val last = reports.last()
+        if (polyline.points.size > 1) {
+            map.addPolyline(polyline)
+        }
+        if (sortedReports.isNotEmpty()) {
+            val last = sortedReports.last()
             map.moveCamera(
                 CameraUpdateFactory.changeLatLng(LatLng(last.lat, last.lng))
             )
