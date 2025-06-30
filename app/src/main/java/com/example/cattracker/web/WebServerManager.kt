@@ -3,9 +3,15 @@ package com.example.cattracker.web
 object WebServerManager {
     private var server: CatWebServer? = null
 
-    fun start(port: Int) {
+    fun start(port: Int): Boolean {
         stop()
-        server = CatWebServer(port).also { it.startServer() }
+        val srv = CatWebServer(port)
+        return if (srv.startServer()) {
+            server = srv
+            true
+        } else {
+            false
+        }
     }
 
     fun stop() {

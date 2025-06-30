@@ -8,9 +8,15 @@ import org.json.JSONObject
 
 class CatWebServer(port: Int) : NanoHTTPD(port) {
 
-    fun startServer() {
-        start(SOCKET_READ_TIMEOUT, false)
-        Log.i("CatWebServer", "Server started on port $listeningPort")
+    fun startServer(): Boolean {
+        return try {
+            start(SOCKET_READ_TIMEOUT, false)
+            Log.i("CatWebServer", "Server started on port $listeningPort")
+            true
+        } catch (e: java.io.IOException) {
+            Log.e("CatWebServer", "start failed", e)
+            false
+        }
     }
 
     override fun serve(session: IHTTPSession): Response {

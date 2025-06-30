@@ -15,7 +15,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BluetoothService(private val address: String) {
+class BluetoothService(
+    private val address: String,
+    private val onResult: ((Boolean) -> Unit)? = null
+) {
     private val adapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private var socket: BluetoothSocket? = null
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -30,9 +33,11 @@ class BluetoothService(private val address: String) {
             scope.launch {
                 try {
                     socket?.connect()
+                    onResult?.invoke(true)
                     listen()
                 } catch (e: Exception) {
                     Log.e("BluetoothService", "connection error", e)
+                    onResult?.invoke(false)
                 }
             }
         }
