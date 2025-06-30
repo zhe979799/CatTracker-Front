@@ -9,6 +9,7 @@ import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
+import com.amap.api.maps.model.PolylineOptions
 import com.example.cattracker.R
 import com.example.cattracker.data.ReportRepository
 import kotlinx.coroutines.launch
@@ -26,13 +27,19 @@ class MapActivity : AppCompatActivity() {
                 ReportRepository.reports.collect { reports ->
                     val map = mapView.map
                     map.clear()
-                    reports.forEach { report ->
+                    val sorted = reports.sortedBy { it.timestamp }
+                    val polyline = PolylineOptions()
+                    sorted.forEach { report ->
                         val position = LatLng(report.lat, report.lng)
-                        map.addMarker(
-                            MarkerOptions().position(position).title(report.catId)
-                        )
+                        polyline.add(position)
+                        val marker = MarkerOptions().position(position).title(report.catId)
+                        report.info?.let { marker.snippet(it) }
+                        map.addMarker(marker)
                     }
-                    reports.lastOrNull()?.let { last ->
+                    if (polyline.points.size > 1) {
+                        map.addPolyline(polyline)
+                    }
+                    sorted.lastOrNull()?.let { last ->
                         val lastPos = LatLng(last.lat, last.lng)
                         map.moveCamera(CameraUpdateFactory.changeLatLng(lastPos))
                     }

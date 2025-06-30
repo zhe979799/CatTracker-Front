@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import android.widget.Toast
 import com.example.cattracker.ui.theme.CatTrackerTheme
 import com.example.cattracker.web.WebServerManager
 import com.example.cattracker.bluetooth.BluetoothService
@@ -32,6 +33,7 @@ class SettingsActivity : ComponentActivity() {
 @Composable
 fun SettingsScreen() {
     var portText by remember { mutableStateOf(AppPrefs.port.toString()) }
+    var isPortError by remember { mutableStateOf(false) }
     var addressText by remember { mutableStateOf(AppPrefs.bluetoothAddress) }
     val context = LocalContext.current
 
@@ -46,8 +48,12 @@ fun SettingsScreen() {
     Column(modifier = Modifier.padding(16.dp)) {
         OutlinedTextField(
             value = portText,
-            onValueChange = { portText = it.filter { ch -> ch.isDigit() } },
-            label = { Text("Server Port") }
+            onValueChange = {
+                portText = it.filter { ch -> ch.isDigit() }
+                isPortError = portText.toIntOrNull() == null
+            },
+            label = { Text("Server Port") },
+            isError = isPortError
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
@@ -61,9 +67,14 @@ fun SettingsScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         Row {
             Button(onClick = {
-                portText.toIntOrNull()?.let { port ->
+                val port = portText.toIntOrNull()
+                if (port != null) {
+                    isPortError = false
                     AppPrefs.port = port
                     WebServerManager.start(port)
+                } else {
+                    isPortError = true
+                    Toast.makeText(context, "Invalid server port", Toast.LENGTH_SHORT).show()
                 }
             }) { Text("Start Server") }
             Spacer(modifier = Modifier.width(8.dp))
