@@ -55,8 +55,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // 关闭服务器，释放端口
+        // Stop the embedded HTTP server and close the repository's coroutine
+        // scope to avoid leaking background work
         WebServerManager.stop()
+        ReportRepository.close()
     }
 }
 
