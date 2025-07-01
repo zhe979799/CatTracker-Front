@@ -6,13 +6,12 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.ZoomIn
-import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -24,6 +23,7 @@ import com.amap.api.maps.model.Marker
 import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.Polyline
 import com.amap.api.maps.model.PolylineOptions
+import com.example.cattracker.R
 import com.example.cattracker.data.ReportRepository
 import java.util.Calendar
 
@@ -125,10 +125,14 @@ fun MapScreen(repo: ReportRepository) {
         ) {
             FloatingActionButton(onClick = {
                 map.animateCamera(CameraUpdateFactory.zoomIn())
-            }) { Icon(Icons.Default.ZoomIn, contentDescription = null) }
+            }) { Icon(painter = painterResource(R.drawable.baseline_zoom_in_24),
+                contentDescription = "Zoom in",
+                modifier = Modifier.size(24.dp)) }
             FloatingActionButton(onClick = {
                 map.animateCamera(CameraUpdateFactory.zoomOut())
-            }) { Icon(Icons.Default.ZoomOut, contentDescription = null) }
+            }) { Icon(painter = painterResource(R.drawable.zoom_out_24),
+                contentDescription = "Zoom out",
+                modifier = Modifier.size(24.dp)) }
             FloatingActionButton(onClick = { showDatePicker = true }) {
                 Icon(Icons.Default.DateRange, contentDescription = null)
             }
