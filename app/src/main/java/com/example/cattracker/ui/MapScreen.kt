@@ -23,6 +23,7 @@ import com.amap.api.maps.model.Marker
 import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.Polyline
 import com.amap.api.maps.model.PolylineOptions
+import com.amap.api.maps.model.MyLocationStyle
 import com.example.cattracker.R
 import com.example.cattracker.data.ReportRepository
 import java.util.Calendar
@@ -66,6 +67,10 @@ fun MapScreen(repo: ReportRepository) {
         map.uiSettings.isMyLocationButtonEnabled = true
         map.uiSettings.isZoomControlsEnabled = true
         map.isMyLocationEnabled = true
+        val locStyle = MyLocationStyle().apply {
+            myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW)
+        }
+        map.myLocationStyle = locStyle
     }
 
     LaunchedEffect(reports, selectedDate) {

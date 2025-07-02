@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import android.content.Intent
+import androidx.compose.material.IconButton
 import androidx.compose.material.TextButton
 import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +34,9 @@ import com.example.cattracker.SettingsActivity
 import com.example.cattracker.ReportListActivity
 import com.example.cattracker.R
 import com.amap.api.maps.MapsInitializer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.List
 
 class MainActivity : ComponentActivity() {
 
@@ -110,15 +114,23 @@ fun AppContent(repo: ReportRepository) {
             TopAppBar(
                 title = { Text(stringResource(R.string.title_main)) },
                 actions = {
-                    TextButton(onClick = {
+                    IconButton(onClick = {
                         context.startActivity(Intent(context, SettingsActivity::class.java))
                     }) {
-                        Text(stringResource(R.string.btn_settings), color = MaterialTheme.colors.onPrimary)
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.btn_settings),
+                            tint = MaterialTheme.colors.onPrimary
+                        )
                     }
-                    TextButton(onClick = {
+                    IconButton(onClick = {
                         context.startActivity(Intent(context, ReportListActivity::class.java))
                     }) {
-                        Text(stringResource(R.string.btn_reports), color = MaterialTheme.colors.onPrimary)
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = stringResource(R.string.btn_reports),
+                            tint = MaterialTheme.colors.onPrimary
+                        )
                     }
                 }
             )
